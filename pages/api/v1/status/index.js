@@ -3,5 +3,4 @@ function status(request, response) {
     chave: "Tudo Okay",
   });
 }
-
 export default status;
