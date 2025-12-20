@@ -3,13 +3,16 @@ import database from "infra/database.js";
 async function status(request, response) {
   //const updatedAt = Date.now();
   const updatedAt = new Date().toISOString();
-  const query = await database.query(
-    "SELECT (SELECT version()) AS version, (SELECT COUNT (*)::int FROM pg_stat_activity) as pgUsers, (SELECT setting::int FROM pg_settings WHERE name = 'max_connections') AS pgConnections",
-  );
-  console.log(query.rows);
+  const databaseVersionResult = await database.query("SHOW server_version;");
+  const databaseVersionValue = databaseVersionResult.rows[0].server_version;
+  console.log(databaseVersionValue);
   response.status(200).json({
     updated_at: updatedAt,
-    query: query.rows,
+    dependencies: {
+      database: {
+        version: databaseVersionValue,
+      },
+    },
   });
 }
 export default status;
