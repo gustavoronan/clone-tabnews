@@ -7,7 +7,8 @@ export default async function migrations(request, response) {
     dryRun: true,
     dir: join("infra", "migrations"),
     direction: "up",
-    verbose:true
+    verbose:true,
+    migrationsTable:"pgmigrations"
   })
   response.status(200).json([migrations]);
 }
