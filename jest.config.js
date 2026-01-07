@@ -5,7 +5,9 @@ dotenv.config({
   override: true,
 });
 
-const createJestConfig = nextJest();
+const createJestConfig = nextJest({
+  dir: ".",
+});
 
 const jestConfig = createJestConfig({
   moduleDirectories: ["node_modules", "<rootDir>"],
