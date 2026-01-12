@@ -15,7 +15,7 @@ test("GET to /api/v1/migrations should return to 200", async () => {
 
   const jestAmbient = process.env.NODE_ENV;
   if (jestAmbient == "test") {
-    console.log("O ambiente em que o Jest esta rodando eh de testes");
+    console.log("O ambiente em que o Jest esta rodando eh de testess");
     console.log(process.POSTGRES_DB);
   }
 });
