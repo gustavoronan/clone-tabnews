@@ -21,7 +21,12 @@ function UpdatedAt() {
     refreshInterval: 2000,
   });
 
-  let updatedAtText = [];
+  let updatedAtText = [
+    {
+      isLoading: true,
+      text: "Carregando...",
+    },
+  ];
   if (!isLoading && data) {
     updatedAtText = [
       {
@@ -35,12 +40,17 @@ function UpdatedAt() {
 
   return (
     <div>
-      Dados da API:
       {updatedAtText.map((item, index) => (
         <div key={index}>
-          <div>Atualizado: {item.Atualizado}</div>
-          <div>Versão: {item.Versao}</div>
-          <div>Conexões Abertas: {item.Conexoes}</div>
+          {item.isLoading ? (
+            <div>{item.text}</div>
+          ) : (
+            <>
+              <div>Atualizado: {item.Atualizado}</div>
+              <div>Versão: {item.Versao}</div>
+              <div>Conexões Abertas: {item.Conexoes}</div>
+            </>
+          )}
         </div>
       ))}
     </div>
