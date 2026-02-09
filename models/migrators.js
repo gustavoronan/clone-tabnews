@@ -6,7 +6,7 @@ const defaultMigrationOptions = {
   dryRun: true,
   dir: resolve("infra", "migrations"),
   direction: "up",
-  verbose: true,
+  log: () => {}, //jogando os logs para o nada para limpar o terminal;
   migrationsTable: "pgmigrations",
 };
 
