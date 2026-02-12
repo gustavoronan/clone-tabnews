@@ -1,22 +1,72 @@
 import database from "infra/database";
+import { ValidationError } from "infra/errors.js";
 
 async function create(userInputValues) {
-  const results = await database.query({
-    text: `
-      INSERT INTO
+  await validateUniqueUser(userInputValues.username);
+  async function validateUniqueUser(username) {
+    const results = await database.query({
+      text: `
+      SELECT 
+        username 
+      FROM
        users 
-        (username, email, password)
-       VALUES 
-        ($1, $2, $3)
-        RETURNING * 
+      WHERE 
+        LOWER(username) = LOWER($1)
         `,
-    values: [
-      userInputValues.username,
-      userInputValues.email,
-      userInputValues.password,
-    ],
-  });
-  return results.rows[0];
+      values: [username],
+    });
+
+    if (results.rowCount > 0) {
+      throw new ValidationError({
+        message: "O Username informado ja esta sendo utilizado",
+        action: "Para se cadastrar utilize outro Username",
+      });
+    }
+  }
+
+  await validateUniqueEmail(userInputValues.email);
+  async function validateUniqueEmail(email) {
+    const results = await database.query({
+      text: `
+      SELECT 
+        email 
+      FROM
+       users 
+      WHERE 
+        LOWER(email) = LOWER($1)
+        `,
+      values: [email],
+    });
+
+    if (results.rowCount > 0) {
+      throw new ValidationError({
+        message: "O email informado ja esta sendo utilizado",
+        action: "Para se cadastrar utilize outro email",
+      });
+    }
+  }
+
+  const newUser = runInsertQuery(userInputValues);
+  return newUser;
+
+  async function runInsertQuery(userInputValues) {
+    const results = await database.query({
+      text: `
+      INSERT INTO
+      users 
+      (username, email, password)
+      VALUES 
+      ($1, $2, $3)
+      RETURNING * 
+      `,
+      values: [
+        userInputValues.username,
+        userInputValues.email,
+        userInputValues.password,
+      ],
+    });
+    return results.rows[0];
+  }
 }
 
 const user = {
