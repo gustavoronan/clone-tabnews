@@ -1,5 +1,4 @@
 import orchestrator from "tests/orchestrator.js";
-import database from "infra/database";
 import { version as uuidVersion } from "uuid";
 import user from "models/users";
 import password from "models/password";
@@ -22,10 +21,6 @@ describe("POST /api/v1/users", () => {
           password: "senha123",
         }),
       });
-
-      const users = await database.query("SELECT * FROM users");
-      console.log("========= User Test", users.rows);
-
       expect(response.status).toBe(201);
       const responseBody = await response.json();
       expect(responseBody).toEqual({
@@ -86,7 +81,7 @@ describe("POST /api/v1/users", () => {
       expect(response2Body).toEqual({
         name: "ValidationError",
         message: "O email informado ja esta sendo utilizado",
-        action: "Para se cadastrar utilize outro email",
+        action: "Para esta operacao utilize outro email",
         statusCode: 400,
       });
     });
@@ -105,7 +100,7 @@ describe("POST /api/v1/users", () => {
       expect(response3Body).toEqual({
         name: "ValidationError",
         message: "O Username informado ja esta sendo utilizado",
-        action: "Para se cadastrar utilize outro Username",
+        action: "Para esta operacao utilize outro Username",
         statusCode: 400,
       });
     });
