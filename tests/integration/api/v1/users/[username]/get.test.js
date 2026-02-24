@@ -6,7 +6,7 @@ beforeAll(async () => {
   await orchestrator.clearDatabase();
   await orchestrator.runPendingMigrations();
 });
-describe("POST /api/v1/users/[username]", () => {
+describe("GET /api/v1/users/[username]", () => {
   describe("Anonymous User", () => {
     test("With exact case match", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
